@@ -25,11 +25,7 @@ namespace explorer
 
         public void printMove()
         {
-            //ascii A=65 H=72   
-            if (WhiteMove)
-            {
-                Console.WriteLine($"{char.ToUpper(letter)} {Convert.ToChar(yFrom+65)}{8-xFrom} to {Convert.ToChar(yTo + 65)}{8 - xTo}");
-            }
+            Console.WriteLine($"{char.ToUpper(letter)} {Convert.ToChar(yFrom + 65)}{8 - xFrom} to {Convert.ToChar(yTo + 65)}{8 - xTo}");
         }
     }
 }

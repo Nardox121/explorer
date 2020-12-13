@@ -193,9 +193,9 @@ namespace explorer
             {
                 for(int j = 0; j < 8; j++)
                 {
-                    if (char.IsUpper(Board[i][j]) == WhiteMove)
+                    List<int[]> pieceMoves = new List<int[]>();
+                    if (char.IsUpper(Board[i][j])==WhiteMove)
                     {
-                        List<int[]> pieceMoves = new List<int[]>();
                         if (PieceBoard[i][j].Moves(this.Board) != null)
                         {
                             pieceMoves = PieceBoard[i][j].PossibleMoves();
