@@ -7,11 +7,13 @@ namespace explorer
     {
         static void Main(string[] args)
         {
-            Chessboard c = new Chessboard("5k2/3N4/2q5/6b1/8/1pBnP3/4P3/2K5 b - - 0 1");
-            List<Move> moves = c.allMoves();
-            foreach(Move m in moves)
-            {
-                m.printMove();
+            string str;
+            while((str = Console.ReadLine()) != "") {
+                Chessboard c = new Chessboard(str);
+                List<Move> moves = c.AllMoves();
+                foreach(Move m in moves) {
+                    Console.WriteLine(m);
+                }
             }
         }
     }

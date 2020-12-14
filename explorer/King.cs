@@ -6,31 +6,18 @@ namespace explorer
 {
     class King : Piece
     {
-        public King(int x, int y, char letter, Chessboard board)
-        {
-            this.x = x;
-            this.y = y;
-            this.chessboard = board;
-            this.Letter = letter;
+        public King(Point position, Chessboard board, PieceColor color) : base(position, board, color) {
+            Letter = 'K';
         }
 
-        override public List<int[]> Moves(char[][]board)
-        {
-            List<int[]> moves = new List<int[]>();
-            int[,] multipliers = { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
-            for (int set = 0; set < 8; set++)
-            {
-                if(x + multipliers[set, 0] < 8 & y + multipliers[set, 1] < 8 & x + multipliers[set, 0] >= 0 & y + multipliers[set, 1] >= 0)
-                {
-                    if (board[x + multipliers[set, 0]][y + multipliers[set, 1]] == '0')
-                    {
-                        int[] move = { x + multipliers[set, 0], y + multipliers[set, 1] };
-                        moves.Add(move);
-                    }
-                    else if (Chessboard.isOppositeColor(board[x + multipliers[set, 0]][y + multipliers[set, 1]], Letter))
-                    {
-                        int[] move = { x + multipliers[set, 0], y + multipliers[set, 1] };
-                        moves.Add(move);
+        override public List<Point> Moves() {
+            List<Point> moves = new List<Point>();
+
+            for(int i = -1; i < 2; i++) {
+                for(int j = -1; j < 2; j++) {
+                    Point possibleMove = position + new Point(i, j);
+                    if(IsOnBoard(possibleMove) && chessboard.PieceOn(possibleMove).color != color) {
+                        moves.Add(possibleMove);
                     }
                 }
             }

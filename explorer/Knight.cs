@@ -6,28 +6,32 @@ namespace explorer
 {
     class Knight : Piece
     {
-        public Knight(int x, int y, char letter, Chessboard board)
-        {
-            this.x = x;
-            this.y = y;
-            this.chessboard = board;
-            this.Letter = letter;
+        public Knight(Point position, Chessboard board, PieceColor color) : base(position, board, color) {
+            Letter = 'n';
         }
 
-        override public List<int[]> Moves(char[][]board)
-        {
-            List<int[]> moves = new List<int[]>();
-            int[,] values = { { -1, 2 }, { 1, 2 }, { -1, -2 }, { 1, -2 }, { -2, -1 }, { -2, 1 }, { 2, -1 }, { 2, 1 } };
-            for (int set = 0; set < 8; set++)
-            {
-                if (Chessboard.isOnBoard(x + values[set, 0], y + values[set, 1]) && (board[x + values[set, 0]][y + values[set, 1]] == '0' || Chessboard.isOppositeColor(board[x + values[set, 0]][y + values[set, 1]], Letter)))
-                {
-                    int[] move = { x + values[set, 0], y + values[set, 1] };
-                    moves.Add(move);
+        public override List<Point> Moves() {
+            List<Point> moves = new List<Point>();
+
+            Point[] offset = { 
+                new Point(-1, 2), 
+                new Point(1, 2), 
+                new Point(-1, -2), 
+                new Point(1, -2), 
+                new Point(-2, -1), 
+                new Point(-2, 1), 
+                new Point(2, -1), 
+                new Point(2, 1) 
+            };
+
+            for (int i = 0; i < offset.Length; i++) {
+                Point possibleMove = position + offset[i];
+                if (IsOnBoard(possibleMove) && chessboard.PieceOn(possibleMove).color != color) {
+                    moves.Add(possibleMove);
                 }
             }
+
             return moves;
         }
-
     }
 }
