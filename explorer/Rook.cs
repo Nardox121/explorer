@@ -2,44 +2,35 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace explorer
-{
-    class Rook : Piece
-    {
-        public Rook(int x, int y, char letter, Chessboard board)
-        {
-            this.x = x;
-            this.y = y;
-            this.chessboard = board;
-            this.Letter = letter;
+namespace explorer {
+    class Rook : Piece {
+        public Rook(Point position, Chessboard board, PieceColor color) : base(position, board, color) {
+            Letter = 'R';
         }
 
-        override public List<int[]> Moves(char[][]board)
-        {
-            List<int[]> moves = new List<int[]>();
-            int[] deltaX = { 0, 0, 1, -1 };
-            int[] deltaY = { 1, -1, 0, 0 };
-            for (int i=0;i<4;i++)
-            {
-                int x = this.x;
-                int y = this.y;
+        override public List<Point> Moves() {
+            List<Point> moves = new List<Point>();
 
-                x += deltaX[i];
-                y += deltaY[i];
-                while (x < 8 && x >= 0 && y < 8 && y >= 0 && board[x][y] == '0')
-                {
-                    int[] move = { x, y };
-                    moves.Add(move);
-                    x += deltaX[i];
-                    y += deltaY[i];
-                }
-                if (x < 8 && x >= 0 && y < 8 && y >= 0 && Chessboard.isOppositeColor(board[x][y], Letter))
-                {
-                    int[] move = { x, y };
-                    moves.Add(move);
-                }
+            Point[] offset = {
+                new Point(0, 1),
+                new Point(0, -1),
+                new Point(1, 0),
+                new Point(-1, 0)
+            };
 
+            for(int i = 0; i < 4; i++) {
+                Point possibleMove = position;
+
+                possibleMove += offset[i];
+                while(IsOnBoard(possibleMove) && chessboard.PieceOn(possibleMove).color == PieceColor.none) {
+                    moves.Add(possibleMove);
+                    possibleMove += offset[i];
+                }
+                if(IsOnBoard(possibleMove) && chessboard.PieceOn(possibleMove).color != color) {
+                    moves.Add(possibleMove);
+                }
             }
+
             return moves;
         }
     }

@@ -2,45 +2,44 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace explorer
-{
-    abstract class Piece
-    {
-        public char Letter;
+namespace explorer {
+    abstract class Piece {
+        public char Letter { get; set; }
         public Chessboard chessboard;
+        public PieceColor color;
 
-        public int x;
-        public int y;
+        public Point position;
 
-        public abstract List<int[]> Moves(char[][]board);
+        public Piece(Point point, Chessboard board, PieceColor color) {
+            this.position = point;
+            this.chessboard = board;
+            this.color = color;
+        }
 
-        public List<int[]> PossibleMoves()
-        {
-            List<int[]> moves = new List<int[]>();
-            foreach (int[] move in this.Moves(chessboard.Board))
-            {
-                chessboard.nextMoveBoard = new char[8][];
-                for (int i = 0; i < 8; i++)
-                {
-                    chessboard.nextMoveBoard[i] = new char[8];
-                    for(int j = 0; j<8;j++)
-                    {
-                        chessboard.nextMoveBoard[i][j] = chessboard.Board[i][j];
-                    }
-                }
+        public abstract List<Point> Moves();
 
-                chessboard.nextMoveBoard[move[0]][move[1]] = this.Letter;
-                chessboard.nextMoveBoard[this.x][this.y] = '0';
+        public List<Point> PossibleMoves() {
+            List<Point> moves = new List<Point>();
 
-                chessboard.nextMovePieceBoard = chessboard.initializePieceBoard(chessboard.nextMoveBoard);
+            foreach(Point move in this.Moves()) {
+                Piece tmp = chessboard.PieceBoard[move.X, move.Y];
 
-                if (!Chessboard.isCheck(chessboard.WhiteMove, chessboard.nextMoveBoard, chessboard.nextMovePieceBoard))
-                {
+                chessboard.PieceBoard[move.X, move.Y] = (Piece)this.MemberwiseClone();
+                chessboard.PieceBoard[move.X, move.Y].position = new Point(move.X, move.Y);
+                chessboard.PieceBoard[position.X, position.Y] = new Empty(new Point(position.X, position.Y), chessboard, PieceColor.none);
+
+                if(!chessboard.IsCheck()) {
                     moves.Add(move);
                 }
+
+                chessboard.PieceBoard[move.X, move.Y] = tmp;
+                chessboard.PieceBoard[position.X, position.Y] = this;
             }
+
             return moves;
         }
 
+        public bool IsOnBoard(Point p)
+            => ((p.X >= 0) && (p.X <= 7) && (p.Y >= 0) && (p.Y <= 7));
     }
 }

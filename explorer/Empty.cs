@@ -4,15 +4,12 @@ using System.Text;
 
 namespace explorer {
     class Empty : Piece {
-        public Empty(int x, int y, char letter, Chessboard board) {
-            this.x = x;
-            this.y = y;
-            this.chessboard = board;
-            this.Letter = letter;
+        public Empty(Point position, Chessboard board, PieceColor color) : base(position, board, color) {
+            Letter = '0';
         }
 
-        public override List<int[]> Moves(char[][] board) {
-            return null;
+        public override List<Point> Moves() {
+            return new List<Point>();
         }
     }
 }

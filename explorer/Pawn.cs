@@ -2,58 +2,60 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace explorer
-{
-    class Pawn : Piece
-    {
+namespace explorer {
+    class Pawn : Piece {
 
-        public Pawn(int x, int y, char letter, Chessboard board)
-        {
-            this.x = x;
-            this.y = y;
-            this.chessboard = board;
-            this.Letter = letter;
+        public Pawn(Point position, Chessboard board, PieceColor color) : base(position, board, color) {
+            Letter = '\0';
         }
 
-        override public List<int[]> Moves(char[][]board)
-        {
-            List<int[]> moves = new List<int[]>();
-            if (char.IsUpper(Letter))
-            {
-                if (y - 1 >= 0 && Chessboard.isOppositeColor(board[x - 1][y - 1], Letter))
-                {
-                    int[] move = { x - 1, y - 1 };
-                    moves.Add(move);
+        override public List<Point> Moves() {
+            List<Point> moves = new List<Point>();
+
+            if(color == PieceColor.white) {
+                Point possibleMove = position + new Point(0, -1);
+                if(IsOnBoard(possibleMove) && !chessboard.IsPieceOn(possibleMove)) {
+                    moves.Add(possibleMove);
                 }
-                if (y + 1 < 8 && Chessboard.isOppositeColor(board[x - 1][y + 1], Letter))
-                {
-                    int[] move = { x - 1, y + 1 };
-                    moves.Add(move);
+
+                possibleMove = position + new Point(0, -2);
+                if(position.Y == 6  && !chessboard.IsPieceOn(possibleMove) && !chessboard.IsPieceOn(position + new Point(0, -1))) {
+                    moves.Add(possibleMove);
                 }
-                if (board[x - 1][y] == '0')
-                {
-                    int[] move = { x - 1, y };
-                    moves.Add(move);
+
+                possibleMove = position + new Point(-1, -1);
+                if(IsOnBoard(possibleMove) && chessboard.IsPieceOn(possibleMove) && chessboard.PieceOn(possibleMove).color != color) {
+                    moves.Add(possibleMove);
                 }
+
+                possibleMove = position + new Point(1, -1);
+                if(IsOnBoard(possibleMove) && chessboard.IsPieceOn(possibleMove) && chessboard.PieceOn(possibleMove).color != color) {
+                    moves.Add(possibleMove);
+                }
+
                 return moves;
             }
-            else
-            {
-                if (y - 1 >= 0 && Chessboard.isOppositeColor(board[x + 1][y - 1], Letter))
-                {
-                    int[] move = { x + 1, y - 1 };
-                    moves.Add(move);
+            else {
+                Point possibleMove = position + new Point(0, 1);
+                if(IsOnBoard(possibleMove) && !chessboard.IsPieceOn(possibleMove)) {
+                    moves.Add(possibleMove);
                 }
-                if (y + 1 < 8 && Chessboard.isOppositeColor(board[x + 1][y + 1], Letter))
-                {
-                    int[] move = { x + 1, y + 1 };
-                    moves.Add(move);
+
+                possibleMove = position + new Point(0, 2);
+                if(position.Y == 6 && !chessboard.IsPieceOn(possibleMove) && !chessboard.IsPieceOn(position + new Point(0, 1))) {
+                    moves.Add(possibleMove);
                 }
-                if (board[x + 1][y] == '0')
-                {
-                    int[] move = { x + 1, y };
-                    moves.Add(move);
+
+                possibleMove = position + new Point(-1, 1);
+                if(IsOnBoard(possibleMove) && chessboard.IsPieceOn(possibleMove) && chessboard.PieceOn(possibleMove).color != color) {
+                    moves.Add(possibleMove);
                 }
+
+                possibleMove = position + new Point(1, 1);
+                if(IsOnBoard(possibleMove) && chessboard.IsPieceOn(possibleMove) && chessboard.PieceOn(possibleMove).color != color) {
+                    moves.Add(possibleMove);
+                }
+
                 return moves;
             }
         }
