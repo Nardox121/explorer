@@ -14,6 +14,7 @@ namespace explorer
                 foreach(Move m in moves) {
                     Console.WriteLine(m);
                 }
+                Console.WriteLine(c.Castling());
             }
         }
     }

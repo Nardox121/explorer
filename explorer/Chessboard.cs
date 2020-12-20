@@ -135,6 +135,129 @@ namespace explorer {
             return moves;
         }
 
+        public string Castling() {
+            if(WhiteOnMove) {
+                return WhiteCastling();
+            }
+            else {
+                return BlackCastling();
+            }
+        }
+
+        public string WhiteCastling() {
+            Point[] longCastling = {
+                new Point(2, 7),
+                new Point(3, 7),
+                new Point(4, 7),
+            };
+            bool longCastle = WhiteCastlingLong;
+
+            Point[] shortCastling = {
+                new Point(4, 7),
+                new Point(5, 7),
+                new Point(6, 7),
+            };
+            bool shortCastle = WhiteCastlingShort;
+
+            if(IsPieceOn(new Point(1, 7)) || IsPieceOn(new Point(2, 7)) || IsPieceOn(new Point(3, 7))) {
+                longCastle = false;
+            }
+
+            if(IsPieceOn(new Point(5, 7)) || IsPieceOn(new Point(6, 7))) {
+                shortCastle = false;
+            }
+
+            for(int i = 0; i < 8; i++) {
+                for(int j = 0; j < 8; j++) {
+                    Piece piece = PieceBoard[i, j];
+
+                    if(piece.color == PieceColor.black) {
+                        List<Point> moves = piece.Moves();
+
+                        foreach(Point move in moves) {
+                            foreach(Point castlingSquare in longCastling) {
+                                if(castlingSquare == move) {
+                                    longCastle = false;
+                                }
+                            }
+                            foreach(Point castlingSquare in shortCastling) {
+                                if(castlingSquare == move) {
+                                    shortCastle = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            StringBuilder s = new StringBuilder();
+            if(longCastle) {
+                s.Append("O-O-O\n");
+            }
+            if(shortCastle) {
+                s.Append("O-O");
+            }
+
+            return s.ToString();
+        }
+
+        public string BlackCastling() {
+            Point[] longCastling = {
+                new Point(2, 0),
+                new Point(3, 0),
+                new Point(4, 0),
+            };
+            bool longCastle = WhiteCastlingLong;
+
+            Point[] shortCastling = {
+                new Point(4, 0),
+                new Point(5, 0),
+                new Point(6, 0),
+            };
+            bool shortCastle = WhiteCastlingShort;
+
+            if(IsPieceOn(new Point(1, 0)) || IsPieceOn(new Point(2, 0)) || IsPieceOn(new Point(3, 0))) {
+                longCastle = false;
+            }
+
+            if(IsPieceOn(new Point(5, 0)) || IsPieceOn(new Point(6, 0))) {
+                shortCastle = false;
+            }
+
+            for(int i = 0; i < 8; i++) {
+                for(int j = 0; j < 8; j++) {
+                    Piece piece = PieceBoard[i, j];
+
+                    if(piece.color == PieceColor.white) {
+                        List<Point> moves = piece.Moves();
+
+                        foreach(Point move in moves) {
+                            foreach(Point castlingSquare in longCastling) {
+                                if(castlingSquare == move) {
+                                    longCastle = false;
+                                }
+                            }
+                            foreach(Point castlingSquare in shortCastling) {
+                                if(castlingSquare == move) {
+                                    shortCastle = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            StringBuilder s = new StringBuilder();
+            if(longCastle) {
+                s.Append("O-O-O\n");
+            }
+            if(shortCastle) {
+                s.Append("O-O");
+            }
+
+            return s.ToString();
+        }
+
         public bool IsPieceOn(Point p)
             => !(PieceBoard[p.X, p.Y] is Empty);
 
